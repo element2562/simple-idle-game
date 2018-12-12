@@ -5,16 +5,12 @@ import Api from "./Components/apiManager";
 class App extends Component {
   state = {
     user: {},
-    interval: 20000,
     timer: 20
   }
   
   componentDidMount() {
     this.refreshValues();
-    this.startTimer(this.state.interval / 1000, document.getElementById("timer"))
-    setInterval(this.createValuesForInterval, this.state.interval);
-    console.log(this.state.timer);
-    
+    this.startTimer(this.state.timer, document.getElementById("timer"))
   }
 
   refreshValues = () => {
@@ -31,6 +27,7 @@ class App extends Component {
         diff,
         minutes,
         seconds;
+    const valuesForIncrease = this.createValuesForInterval;
     function timer() {
         // get the number of seconds that have elapsed since 
         // startTimer() was called
@@ -42,41 +39,63 @@ class App extends Component {
 
         minutes = minutes < 10 ? "0" + minutes : minutes;
         seconds = seconds < 10 ? "0" + seconds : seconds;
-
         display.textContent = minutes + ":" + seconds; 
-
+        
         if (diff <= 0) {
             // add one second so that the count down starts at the full duration
             // example 05:00 not 04:59
+            valuesForIncrease();
             start = Date.now() + 1000;
         }
+        
     };
     // we don't want to wait a full second before the timer starts
+    console.log("diff", diff, "seconds", seconds, "start", start );
+    
+
     timer();
     setInterval(timer, 1000);
 }
-  createValuesForInterval = () => {
-    let user = this.state.user;
-    let moneyUpdate = user.money + user.salary;
-    let xpUpdate = user.experience + user.xpGain;
+
+createValuesForInterval = () => {
+  let user = this.state.user;
+  let moneyUpdate = user.money + user.salary;
+  let xpUpdate = user.experience + user.xpGain;
+  if(user.experience >= user.xpToLevel)
+  {
+    let newLevel = user.level + 1;
+    let newXpToLevel = (user.xpToLevel * 2) + user.xpToLevel;
     this.setState({
       user: {
         userId: user.userId,
-        level: user.level,
+        level: newLevel,
         money: moneyUpdate,
         salary: user.salary,
         experience: xpUpdate,
-        xpToLevel: user.xpToLevel,
+        xpToLevel: newXpToLevel,
         xpGain: user.xpGain
       }
     })
-    console.log(this.state.user);
-    
-    Api.updateValues(this.state.user)
-    .then(res => {
-      this.refreshValues();
-    })
+    alert(`Congrats, you are now Level ${user.level}`);
   }
+  else {
+  this.setState({
+    user: {
+      userId: user.userId,
+      level: user.level,
+      money: moneyUpdate,
+      salary: user.salary,
+      experience: xpUpdate,
+      xpToLevel: user.xpToLevel,
+      xpGain: user.xpGain
+    }
+  })
+}
+  Api.updateValues(this.state.user)
+  .then(res => {
+    this.refreshValues();
+  })
+}
 
   render() {
     return (
