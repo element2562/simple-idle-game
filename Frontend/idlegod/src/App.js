@@ -21,7 +21,29 @@ class App extends Component {
       })
     })
   }
-
+  levelUp = (moneyUpdate, xpUpdate) => {
+    let user = this.state.user;
+    let newLevel = user.level + 1;
+    let newXpToLevel = (user.xpToLevel * 2) + user.xpToLevel;
+    this.setState({
+      user: {
+        userId: user.userId,
+        level: newLevel,
+        money: moneyUpdate,
+        salary: user.salary,
+        experience: xpUpdate,
+        xpToLevel: newXpToLevel,
+        xpGain: user.xpGain
+      }
+    })
+    Api.updateValues(this.state.user)
+    .then(response => {
+      this.refreshValues()
+    })
+    .then(res => {
+      alert(`Congrats, you are now Level ${user.level}`);
+    })
+  }
   startTimer(duration, display) {
     var start = Date.now(),
         diff,
@@ -63,20 +85,7 @@ createValuesForInterval = () => {
   let xpUpdate = user.experience + user.xpGain;
   if(user.experience >= user.xpToLevel)
   {
-    let newLevel = user.level + 1;
-    let newXpToLevel = (user.xpToLevel * 2) + user.xpToLevel;
-    this.setState({
-      user: {
-        userId: user.userId,
-        level: newLevel,
-        money: moneyUpdate,
-        salary: user.salary,
-        experience: xpUpdate,
-        xpToLevel: newXpToLevel,
-        xpGain: user.xpGain
-      }
-    })
-    alert(`Congrats, you are now Level ${user.level}`);
+    this.levelUp(moneyUpdate, xpUpdate);
   }
   else {
   this.setState({
@@ -103,9 +112,9 @@ createValuesForInterval = () => {
         <h1>Level {this.state.user.level}</h1>
         <h3 id="timer"></h3>
         <div className="xpAndIncome">
-          <h5>Money: {this.state.user.money}</h5>
+          <h5>Money: ${this.state.user.money}</h5>
           <h5>Experience: {this.state.user.experience}/{this.state.user.xpToLevel}</h5>
-          <h5>Salary: {this.state.user.salary}</h5>
+          <h5>Salary: ${this.state.user.salary}</h5>
           <h5>Experience Gain: {this.state.user.xpGain}</h5>
         </div>
         <div className="purchases">
