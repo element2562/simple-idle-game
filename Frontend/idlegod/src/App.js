@@ -5,14 +5,43 @@ import Api from "./Components/apiManager";
 class App extends Component {
   state = {
     user: {},
-    timer: 20
+    timer: 20,
+    salaryBumpPrice: 750,
+    xpGainBumpPrice: 500,
+    timerDecreasePrice: 10000
   }
   
   componentDidMount() {
     this.refreshValues();
     this.startTimer(this.state.timer, document.getElementById("timer"))
   }
-
+  salaryGainPurchase = () => {
+    let user = this.state.user;
+    let price = this.state.salaryBumpPrice;
+    let newSalary = user.salary * 2;
+    let updatedMoney = user.money - price;
+    if(user.money < price){
+      alert(`You don't have enough money. You are $${price - user.money} short.`);
+    }
+    else{
+    this.setState({
+      user: {
+        userId: user.userId,
+        level: user.level,
+        money: updatedMoney,
+        salary: newSalary,
+        experience: user.experience,
+        xpToLevel: user.xpToLevel,
+        xpGain: user.xpGain
+      },
+      salaryBumpPrice: (price * 2) + price
+    })
+    Api.updateValues(this.state.user)
+    .then(res => {
+      this.refreshValues();
+    })
+  }
+  }
   refreshValues = () => {
     Api.getUsers()
     .then(response => {
@@ -72,8 +101,6 @@ class App extends Component {
         
     };
     // we don't want to wait a full second before the timer starts
-    console.log("diff", diff, "seconds", seconds, "start", start );
-    
 
     timer();
     setInterval(timer, 1000);
@@ -118,7 +145,8 @@ createValuesForInterval = () => {
           <h5>Experience Gain: {this.state.user.xpGain}</h5>
         </div>
         <div className="purchases">
-          <p>Purchases coming soon</p>
+          <h5>Buy this to double your salary!</h5>
+          <button onClick={this.salaryGainPurchase}>${this.state.salaryBumpPrice}</button>
         </div>
       </div>
     );
