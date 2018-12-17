@@ -25,7 +25,11 @@ namespace IdleGod.Data
                 Salary = 25,
                 Experience = 0,
                 XpToLevel = 500,
-                XpGain = 10
+                XpGain = 10,
+                XpBumpPrice = 500,
+                SalaryBumpPrice = 750,
+                TimerDecreasePrice = 10000,
+                Timer = 20
             };
 
             modelBuilder.Entity<Player>().HasData(player);

@@ -3,14 +3,16 @@ using IdleGod.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IdleGod.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181217161134_timerprice")]
+    partial class timerprice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,8 +35,6 @@ namespace IdleGod.Migrations
 
                     b.Property<int>("SalaryBumpPrice");
 
-                    b.Property<int>("Timer");
-
                     b.Property<int>("TimerDecreasePrice");
 
                     b.Property<int>("XpBumpPrice");
@@ -48,7 +48,7 @@ namespace IdleGod.Migrations
                     b.ToTable("Player");
 
                     b.HasData(
-                        new { UserId = "5b9ee498-aad6-420b-8aaf-d8943f8cec11", Experience = 0, Level = 1, Money = 0, Salary = 25, SalaryBumpPrice = 750, Timer = 20, TimerDecreasePrice = 10000, XpBumpPrice = 500, XpGain = 10, XpToLevel = 500 }
+                        new { UserId = "c0e87b50-1ad0-4e82-a180-67de25c36628", Experience = 0, Level = 1, Money = 0, Salary = 25, SalaryBumpPrice = 750, TimerDecreasePrice = 10000, XpBumpPrice = 500, XpGain = 10, XpToLevel = 500 }
                     );
                 });
 #pragma warning restore 612, 618

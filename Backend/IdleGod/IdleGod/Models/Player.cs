@@ -24,5 +24,13 @@ namespace IdleGod.Models
 
         public int XpGain { get; set; }
 
+        public int SalaryBumpPrice { get; set; }
+
+        public int XpBumpPrice { get; set; }
+
+        public int TimerDecreasePrice { get; set; }
+
+        public int Timer { get; set; }
+
     }
 }
